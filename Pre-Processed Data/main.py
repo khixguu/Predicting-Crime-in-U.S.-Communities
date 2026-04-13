@@ -38,3 +38,14 @@ file3.info()
 
 
 
+# Data Prep
+
+# Encoding
+
+# Splitting
+
+# Random Forest Model
+
+# Predictions and Evaluations
+
+# Visualization
