@@ -36,6 +36,18 @@ file3 = pd.read_csv(file_path3)
 # print("LA Data")
 # file3.info()
 
+keywords = ['ASSAULT', 'AGGRAVATED', 'BATTERY', 'BRANDISH WEAPON','ARSON', 'RAPE', 'CHILD ABUSE', 'SHOTS FIRED'] 
+
+def classify_crime(crime):
+    crime = crime.upper()
+    for word in keywords:
+        if crime in keywords:
+            return 1
+        return 0
+    
+   
+#  assigns "violent" tag if the description containst any of the keywords
+file3["violent"] = file3["Crm Cd Desc"].apply(classify_crime)
 
 
 
@@ -43,20 +55,26 @@ file3 = pd.read_csv(file_path3)
 
 
 
-# Encoding
-
-file3 = pd.get_dummies(file3, drop_first=True)
-
-
 # Defining X and y
 
 # neighborhoods in LA
-X = file3.iloc[:,1:2].values
+X = file3[['AREA NAME']]
 
-# crime descriptions
-y = file3.iloc[:,2].values
+# violent crimes
+y = file3[['violent']]
+
+
+# Encoding
+
+
+file3 = pd.get_dummies(file3, columns = ['AREA NAME'], drop_first=True)
+
+
+X = file3.drop(['Crm Cd Desc', 'violent'], axis=1) 
+y = file3['violent']
 
 # Splitting
+
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -64,9 +82,8 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-      
+    
 # Random Forest Model
-
 
 model = RandomForestClassifier(
     n_estimators=100,
@@ -74,6 +91,7 @@ model = RandomForestClassifier(
 )
 
 model.fit(X_train, y_train)
+
 
 # Predictions and Evaluations
 
