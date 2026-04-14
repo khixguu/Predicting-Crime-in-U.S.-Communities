@@ -38,6 +38,8 @@ file3 = pd.read_csv(file_path3)
 # print("LA Data")
 # file3.info()
 
+
+
 keywords = ['ASSAULT', 'AGGRAVATED', 'BATTERY', 'BRANDISH WEAPON','ARSON', 'RAPE', 'CHILD ABUSE', 'SHOTS FIRED'] 
 
 def classify_crime(crime):
@@ -51,6 +53,7 @@ def classify_crime(crime):
 #  assigns "violent" tag if the description containst any of the keywords
 file3["violent"] = file3["Crm Cd Desc"].apply(classify_crime)
 
+location_rate = file3.groupby('AREA NAME')['violent'].mean().sort_values()
 
 
 # Data Prep
@@ -95,16 +98,26 @@ y_pred = model.predict(X_test)
 # Evaluations
 # confusion matrix
 
-accuracy = accuracy_score(y_test, y_pred)
-print(f'Accuracy: {accuracy * 100:.2f}%')
+# accuracy = accuracy_score(y_test, y_pred)
+# print(f'Accuracy: {accuracy * 100:.2f}%')
 
-conf_matrix = confusion_matrix(y_test, y_pred)
+# conf_matrix = confusion_matrix(y_test, y_pred)
 
-plt.figure(figsize=(8, 6))
+# plt.figure(figsize=(8, 6))
 
-sns.heatmap(conf_matrix, annot=True, fmt='g', cmap='Purples', cbar=True)
+# sns.heatmap(conf_matrix, annot=True, fmt='g', cmap='Purples', cbar=True)
 
-plt.title('Confusion Matrix Heatmap')
-plt.xlabel('Predicted Labels')
-plt.ylabel('True Labels')
+# plt.title('Confusion Matrix Heatmap')
+# plt.xlabel('Predicted Label')
+# plt.ylabel('True Label')
+# plt.show()
+
+
+# violent crime rate by area
+
+
+
+location_rate.plot(kind='barh')
+plt.title("Violent Crime Rate by LA Area")
+plt.xlabel("Proportion of Violent Crimes")
 plt.show()
